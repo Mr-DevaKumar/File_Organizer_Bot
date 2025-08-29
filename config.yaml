@@ -1,0 +1,51 @@
+# config.yaml
+target_directory: "~/Downloads"  # Directory to organize
+log_file: "logs/organizer.log"
+dry_run: false  # Set to true to only show what would be done
+
+rules:
+  # Group by file type
+  - name: "Organize by file type"
+    conditions:
+      - extension: [".pdf", ".doc", ".docx", ".txt"]
+        destination: "Documents/{extension_group}"
+        subfolder_pattern: null
+    
+      - extension: [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"]
+        destination: "Photos/{date_group}"
+        subfolder_pattern: "YYYY-MM"  # Group by month
+    
+      - extension: [".mp4", ".mov", ".avi", ".mkv"]
+        destination: "Videos"
+        subfolder_pattern: null
+    
+      - extension: [".mp3", ".wav", ".flac"]
+        destination: "Music"
+        subfolder_pattern: null
+    
+      - extension: [".zip", ".rar", ".tar", ".gz"]
+        destination: "Archives"
+        subfolder_pattern: null
+  
+  # Group by date (for all files)
+  - name: "Organize by date"
+    conditions:
+      - extension: ["*"]  # All files
+        destination: "Files/{date_group}"
+        subfolder_pattern: "YYYY-MM-DD"  # Group by day
+
+  # Custom rules (example: project files)
+  - name: "Project files"
+    conditions:
+      - filename_contains: ["project_", "report_"]
+        destination: "Projects/{filename_prefix}"
+        subfolder_pattern: null
+
+# Date grouping definitions
+date_groups:
+  last_week: 7
+  last_month: 30
+  older: 365
+
+# Conflict resolution
+conflict_resolution: "rename"  # Options: skip, overwrite, rename
